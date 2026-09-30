@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fireflies Notetaker — Meeting Summaries</title>
+  <meta name="description" content="AI-powered meeting notetaker for Google Meet. Automatic transcripts, summaries, action items, and decisions." />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ea580c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z'/><path d='M19 10v2a7 7 0 0 1-14 0v-2'/><line x1='12' x2='12' y1='19' x2='12' y2='22'/></svg>" />
+</head>
+<body>
+<div class="hero-gradient"></div>
+
+<!-- ─── Navigation ─────────────────────────────────────────────────────── -->
+<nav class="nav">
+  <div class="container nav-inner">
+    <a href="/" class="nav-brand">
+      <div class="nav-brand-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+          <line x1="12" x2="12" y1="19" x2="12" y2="22"/>
+        </svg>
+      </div>
+      <span>Fireflies Notetaker</span>
+    </a>
+    <div class="nav-actions">
+      <!-- Accounts & Integrations Dropdown -->
+      <div class="dropdown" id="integrations-dropdown" style="position:relative">
+        <button class="btn btn-ghost btn-sm" id="btn-integrations-toggle" style="gap:6px;border:1px solid var(--border-subtle)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+          </svg>
+          <span>Connect Google / Teams</span>
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div class="dropdown-menu" id="integrations-menu" style="min-width:320px;right:0;left:auto;padding:8px 0;box-shadow:var(--shadow-lg);border:1px solid var(--border-subtle);background:#ffffff;border-radius:var(--radius-sm)">
+          <div style="padding:8px 14px 6px 14px;border-bottom:1px solid var(--border-subtle)">
+            <div style="font-weight:700;font-size:0.8rem;color:var(--text-primary)">Calendar &amp; Bot Connections</div>
+            <div style="font-size:0.725rem;color:var(--text-muted)">Synced accounts &amp; direct bot admission bypass</div>
+          </div>
+          <div class="integration-item">
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-weight:800;color:#ea580c;font-size:0.85rem">G</span>
+              <div>
+                <div style="font-weight:600;font-size:0.775rem">Google Calendar</div>
+                <div style="font-size:0.675rem;color:var(--text-muted)">Live upcoming sync active</div>
+              </div>
+            </div>
+            <span style="display:inline-flex;align-items:center;gap:4px;font-size:0.7rem;font-weight:700;color:#15803d;background:#f0fdf4;padding:2px 6px;border-radius:10px;border:1px solid #bbf7d0">
+              ● Connected
+            </span>
+          </div>
+          <div class="integration-item">
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-weight:800;color:#2563eb;font-size:0.85rem">T</span>
+              <div>
+                <div style="font-weight:600;font-size:0.775rem">Microsoft Teams</div>
+                <div style="font-size:0.675rem;color:var(--text-muted)">Office 365 calendar sync</div>
+              </div>
+            </div>
+            <span style="display:inline-flex;align-items:center;gap:4px;font-size:0.7rem;font-weight:700;color:#15803d;background:#f0fdf4;padding:2px 6px;border-radius:10px;border:1px solid #bbf7d0">
+              ● Connected
+            </span>
+          </div>
+          <div style="padding:10px 14px;background:#fff7ed;margin:6px 8px;border-radius:var(--radius-xs);border:1px solid #fed7aa">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+              <span style="font-weight:700;font-size:0.75rem;color:#c2410c">Direct Join &amp; Auto-Admit</span>
+              <span style="font-size:0.65rem;color:#15803d;font-weight:700">● 1-Click Ready</span>
+            </div>
+            <p style="font-size:0.7rem;color:#7c2d12;margin:0 0 8px 0;line-height:1.35">
+              Bypasses host admission so the bot joins directly without waiting in guest lobbies.
+            </p>
+            <div style="display:flex;flex-direction:column;gap:5px">
+              <button id="btn-bot-login-profile" class="btn btn-outline-orange btn-sm" style="width:100%;font-size:0.725rem;padding:4px 6px;justify-content:center">
+                1-Click Google Profile Login
+              </button>
+              <button id="btn-copy-autoadmit-bookmarklet" class="btn btn-ghost btn-sm" style="width:100%;font-size:0.725rem;padding:4px 6px;justify-content:center;border:1px dashed #ea580c;color:#c2410c">
+                ⚡ Copy Silent Auto-Admit Script
+              </button>
+              <button id="btn-open-extension-modal" class="btn btn-ghost btn-sm" style="width:100%;font-size:0.725rem;padding:4px 6px;justify-content:center;color:var(--text-muted)">
+                📦 Install Auto-Admit Extension
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-outline-orange btn-sm" id="btn-top-copy-script" title="Copy 1-line script to silently auto-admit bot in Google Meet" style="font-weight:700">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+        </svg>
+        <span>⚡ Auto-Admit Script</span>
+      </button>
+
+      <button class="btn btn-ghost btn-sm" id="btn-mock-meeting">
+        <svg class="svg-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3Z"/>
+        </svg>
+        <span>Quick Demo</span>
+      </button>
+      <button class="btn btn-primary btn-sm" id="btn-new-meeting">
+        <svg class="svg-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" x2="12" y1="5" x2="12" y2="19"/>
+          <line x1="5" x2="19" y1="12" x2="12" y2="12"/>
+        </svg>
+        <span>New Meeting</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <div class="container">
+    <!-- ─── Minimal Header & Inline Status ───────────────────────────── -->
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin:24px 0 18px 0">
+      <div>
+        <h1 style="font-size:1.4rem;font-weight:800;color:var(--text-primary);letter-spacing:-0.02em;margin-bottom:4px">
+          Meeting Intelligence
+        </h1>
+        <p style="font-size:0.825rem;color:var(--text-muted)">
+          Real-time speech-to-text transcripts, action deliverables, and executive briefings
+        </p>
+      </div>
+      <div style="display:inline-flex;align-items:center;gap:14px">
+        <div style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:var(--radius-full);font-size:0.75rem;font-weight:700;color:#15803d">
+          <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#16a34a"></span>
+          <span>48 kHz Opus Synced</span>
+        </div>
+        <div style="font-size:0.775rem;color:var(--text-secondary);font-weight:600">
+          <span id="stat-total-badge" style="color:var(--accent);font-weight:700">0</span> Sessions Recorded
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── Inline Feedback Area (Replaces Popups) ──────────────────── -->
+    <div id="ui-alert-container"></div>
+
+    <!-- ─── Synced Calendar & Upcoming Meetings ────────────────────────── -->
+    <div class="upcoming-calendar-box" id="upcoming-calendar-section">
+      <div class="upcoming-header">
+        <div style="display:flex;align-items:center;gap:8px">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
+            <line x1="16" x2="16" y1="2" y2="6"/>
+            <line x1="8" x2="8" y1="2" y2="6"/>
+            <line x1="3" x2="21" y1="10" y2="10"/>
+          </svg>
+          <span style="font-weight:800;font-size:0.85rem;color:var(--text-primary);letter-spacing:-0.01em">Upcoming Synced Calendar</span>
+          <span id="upcoming-count-badge" style="background:var(--accent-soft);color:var(--accent);font-size:0.7rem;font-weight:700;padding:1px 6px;border-radius:10px;border:1px solid var(--accent-border)">3 Scheduled</span>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+          <!-- Global Auto-Join Toggle -->
+          <label class="toggle-switch" title="Automatically dispatch bot to join at meeting start time">
+            <input type="checkbox" id="toggle-global-autojoin" checked />
+            <span class="toggle-slider"></span>
+            <span>Auto-Join Engine: <strong style="color:var(--accent)" id="autojoin-status-text">ON</strong></span>
+          </label>
+
+          <!-- Add Zoom / Scheduled Meeting Button -->
+          <button class="btn btn-outline-orange btn-sm" id="btn-add-zoom-meeting" style="padding:4px 9px;font-size:0.75rem;gap:4px">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" x2="12" y1="5" x2="12" y2="19"/><line x1="5" x2="19" y1="12" x2="12" y2="12"/></svg>
+            <span>+ Add Zoom / Meeting</span>
+          </button>
+
+          <!-- Collapse / Expand Toggle Button -->
+          <button class="btn btn-ghost btn-sm" id="btn-toggle-calendar-view" style="padding:4px 6px;color:var(--text-muted)" title="Collapse / Expand calendar view">
+            <svg id="calendar-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Upcoming Meetings Rows Container -->
+      <div class="upcoming-rows-container" id="upcoming-meetings-list">
+        <div style="padding:14px;text-align:center;font-size:0.8rem;color:var(--text-muted)">
+          <div class="spinner spinner-sm" style="margin:0 auto 6px auto"></div>
+          Syncing upcoming meetings from connected accounts…
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── Control Hub (Platform Dropdown, Search, Toggles & Limit) ─── -->
+    <div style="background:var(--bg-surface);border:1px solid var(--border-subtle);border-radius:var(--radius-md);box-shadow:var(--shadow-sm);padding:8px 12px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+      
+      <!-- Left Group: Search, Platform Dropdown & Status Filter -->
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <div style="position:relative;width:220px">
+          <input type="text" id="meeting-search" placeholder="Search meetings..." style="width:100%;height:32px;box-sizing:border-box;border:1px solid var(--border-subtle);border-radius:var(--radius-xs);padding:4px 8px;font-size:0.8rem;outline:none;background:var(--bg-surface);color:var(--text-primary)" />
+        </div>
+
+        <select id="filter-platform" style="height:32px;padding:0 8px;box-sizing:border-box;border:1px solid var(--border-subtle);border-radius:var(--radius-xs);background:var(--bg-surface);font-size:0.8rem;font-weight:600;color:var(--text-primary);cursor:pointer">
+          <option value="all">All Platforms</option>
+          <option value="google_meet">Google Meet</option>
+          <option value="zoom">Zoom</option>
+          <option value="teams">Microsoft Teams</option>
+        </select>
+
+        <div class="nav-tabs" style="border-bottom:none;margin-bottom:0;background:var(--bg-subtle);padding:2px;border-radius:var(--radius-xs);display:inline-flex;gap:2px">
+          <button class="nav-tab active" id="filter-all" data-filter="all" style="padding:4px 8px;font-size:0.75rem;border-radius:var(--radius-xs);border-bottom:none">
+            All <span id="count-all" style="opacity:0.7;font-weight:400">(0)</span>
+          </button>
+          <button class="nav-tab" id="filter-completed" data-filter="completed" style="padding:4px 8px;font-size:0.75rem;border-radius:var(--radius-xs);border-bottom:none">
+            Completed <span id="count-completed" style="opacity:0.7;font-weight:400">(0)</span>
+          </button>
+          <button class="nav-tab" id="filter-processing" data-filter="processing" style="padding:4px 8px;font-size:0.75rem;border-radius:var(--radius-xs);border-bottom:none">
+            Active <span id="count-processing" style="opacity:0.7;font-weight:400">(0)</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Right Group: Display Limit, Sort & Refresh -->
+      <div style="display:flex;align-items:center;gap:8px">
+        <select id="filter-limit" style="height:32px;padding:0 8px;box-sizing:border-box;border:1px solid var(--border-subtle);border-radius:var(--radius-xs);background:var(--bg-surface);font-size:0.775rem;color:var(--text-primary);cursor:pointer" title="Limit number of visible cards">
+          <option value="4" selected>Latest 4</option>
+          <option value="6">Latest 6</option>
+          <option value="12">Latest 12</option>
+          <option value="all">Show All</option>
+        </select>
+
+        <select id="meeting-sort" style="height:32px;padding:0 8px;box-sizing:border-box;border:1px solid var(--border-subtle);border-radius:var(--radius-xs);background:var(--bg-surface);font-size:0.775rem;color:var(--text-primary);cursor:pointer">
+          <option value="newest">Newest First</option>
+          <option value="oldest">Oldest First</option>
+          <option value="title">Title (A-Z)</option>
+        </select>
+
+        <button class="btn btn-secondary btn-sm" id="btn-refresh-list" title="Refresh meeting records" style="height:32px;padding:0 9px;display:inline-flex;align-items:center;justify-content:center">
+          <svg class="svg-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
+            <path d="M21 3v5h-5"/>
+            <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
+            <path d="M8 16H3v5"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- ─── Loading State ─────────────────────────────────────────────── -->
+    <div id="loading-state" class="loading-state" style="min-height:160px">
+      <div class="spinner"></div>
+      <p class="loading-state-text" style="font-size:0.825rem">Syncing meeting intelligence…</p>
+    </div>
+
+    <!-- ─── Empty State ───────────────────────────────────────────────── -->
+    <div id="empty-state" class="meetings-grid hidden">
+      <div class="empty-state" style="grid-column:1/-1;padding:40px 20px;text-align:center">
+        <div class="empty-state-icon" style="font-size:2rem;margin-bottom:8px">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
+            <line x1="16" x2="16" y1="2" y2="6"/>
+            <line x1="8" x2="8" y1="2" y2="6"/>
+            <line x1="3" x2="21" y1="10" y2="10"/>
+          </svg>
+        </div>
+        <div class="empty-state-title" style="font-weight:700;font-size:1rem;color:var(--text-primary)">No meetings found</div>
+        <p class="empty-state-body" style="font-size:0.825rem;color:var(--text-muted);max-width:400px;margin:6px auto 14px auto">
+          No meeting records match your filter. Create a new meeting or run Quick Demo to test the pipeline.
+        </p>
+        <div style="display:flex;gap:10px;justify-content:center">
+          <button class="btn btn-primary btn-sm" id="btn-new-meeting-empty">+ New Meeting</button>
+          <button class="btn btn-ghost btn-sm" id="btn-mock-empty">Quick Demo</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── Meetings Grid ─────────────────────────────────────────────── -->
+    <div id="meetings-grid" class="meetings-grid"></div>
+  </div>
+</main>
+
+<!-- ─── New Meeting Modal ──────────────────────────────────────────────── -->
+<div id="modal-overlay" class="modal-overlay hidden">
+  <div id="new-meeting-modal" class="modal">
+    <div class="modal-header">
+      <span class="modal-title" style="display:flex;align-items:center;gap:8px">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+          <line x1="12" x2="12" y1="19" x2="12" y2="22"/>
+        </svg>
+        <span>Launch Meeting Bot</span>
+      </span>
+      <button class="modal-close" id="modal-close" aria-label="Close">✕</button>
+    </div>
+    <form id="new-meeting-form" autocomplete="off">
+      <div class="modal-body">
+        <div style="background:#fff7ed;border:1px solid #ffedd5;border-radius:var(--radius-xs);padding:10px 12px;margin-bottom:16px;font-size:0.8rem;color:#c2410c;line-height:1.45">
+          Paste your Google Meet link below. The bot will automatically launch a real browser, join the meeting room, record the raw 48 kHz WebRTC Opus audio &amp; speech, and generate the executive AI summary.
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="f-platform">Platform</label>
+          <select class="form-input" id="f-platform" name="platform">
+            <option value="google_meet" selected>Google Meet</option>
+            <option value="zoom">Zoom (coming soon)</option>
+            <option value="teams">Microsoft Teams (coming soon)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="f-meeting-url">
+            Meeting Link or Code <span style="color:#dc2626">*</span>
+          </label>
+          <input type="text" class="form-input" id="f-meeting-url" name="meeting_url"
+            placeholder="https://meet.google.com/xxx-yyyy-zzz or xxx-yyyy-zzz" required autofocus />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="f-title">Meeting Title (optional)</label>
+          <input type="text" class="form-input" id="f-title" name="title"
+            placeholder="e.g. Engineering Architecture Sync" />
+        </div>
+
+        <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:var(--radius-xs);padding:8px 10px;margin-top:10px;display:flex;align-items:center;justify-content:space-between;gap:8px">
+          <div>
+            <div style="font-size:0.75rem;font-weight:700;color:#15803d">⚡ Silent Auto-Admit Console Script</div>
+            <div style="font-size:0.675rem;color:#166534">Paste into Google Meet DevTools console (F12) to auto-admit without clicking!</div>
+          </div>
+          <button type="button" id="btn-modal-copy-script" class="btn btn-outline-orange btn-sm" style="font-size:0.7rem;padding:3px 8px;white-space:nowrap">
+            📋 Copy Script
+          </button>
+        </div>
+
+        <div style="font-size:0.75rem;color:var(--text-muted);margin-top:6px;line-height:1.4">
+          Note: If your meeting requires host admission, click <strong>"Admit"</strong> when <em>"Fireflies Notetaker"</em> requests to join, or paste the script above.
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-ghost" id="modal-cancel">Cancel</button>
+        <button type="submit" id="btn-submit-launch-bot" class="btn btn-primary" style="gap:6px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="5 3 19 12 5 21 5 3"/>
+          </svg>
+          <span>Launch Bot &amp; Record</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ─── Modal: Add Zoom / Scheduled Meeting ──────────────────────────── -->
+<div id="modal-zoom-overlay" class="modal-overlay hidden">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" style="display:flex;align-items:center;gap:8px">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m22 8-6 4 6 4V8Z"/><rect width="14" height="12" x="2" y="6" rx="2" ry="2"/>
+        </svg>
+        <span>Add Meeting to Calendar (Auto-Join)</span>
+      </span>
+      <button class="modal-close" id="modal-zoom-close" aria-label="Close">✕</button>
+    </div>
+    <form id="form-add-zoom" autocomplete="off">
+      <div class="modal-body">
+        <div style="background:#fff7ed;border:1px solid #ffedd5;border-radius:var(--radius-xs);padding:8px 12px;margin-bottom:14px;font-size:0.775rem;color:#c2410c;line-height:1.4">
+          Add any upcoming Zoom, Google Meet, or Teams call. The bot will automatically join when the meeting starts.
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="zoom-platform">Platform</label>
+          <select class="form-input" id="zoom-platform" name="platform">
+            <option value="zoom" selected>Zoom</option>
+            <option value="google_meet">Google Meet</option>
+            <option value="teams">Microsoft Teams</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="zoom-url">Meeting Link <span style="color:#dc2626">*</span></label>
+          <input type="text" class="form-input" id="zoom-url" name="meeting_url" placeholder="https://zoom.us/j/9876543210 or Google Meet link" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="zoom-title">Meeting Title</label>
+          <input type="text" class="form-input" id="zoom-title" name="title" placeholder="e.g. Client Architecture &amp; Demo" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="zoom-time">Scheduled Start Time</label>
+          <select class="form-input" id="zoom-time" name="scheduled_offset">
+            <option value="15">Starts in 15 minutes</option>
+            <option value="30" selected>Starts in 30 minutes</option>
+            <option value="60">Starts in 1 hour</option>
+            <option value="120">Starts in 2 hours</option>
+            <option value="tomorrow">Tomorrow at 10:00 AM</option>
+          </select>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
+          <input type="checkbox" id="zoom-autojoin" checked style="accent-color:#ea580c;width:15px;height:15px;cursor:pointer" />
+          <label for="zoom-autojoin" style="font-size:0.8rem;font-weight:600;color:var(--text-primary);cursor:pointer">
+            Automatically dispatch bot to join at meeting start time
+          </label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-ghost" id="modal-zoom-cancel">Cancel</button>
+        <button type="submit" id="btn-submit-add-zoom" class="btn btn-primary">Add &amp; Enable Auto-Join</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ─── Modal: Auto-Admit Extension Guide ────────────────────────────── -->
+<div id="modal-extension-overlay" class="modal-overlay hidden">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-header">
+      <span class="modal-title" style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:1.1rem">⚡</span>
+        <span>Silent Auto-Admit Chrome Extension</span>
+      </span>
+      <button class="modal-close" id="modal-ext-close" aria-label="Close">✕</button>
+    </div>
+    <div class="modal-body" style="font-size:0.825rem;color:var(--text-secondary);line-height:1.5">
+      <p style="margin-top:0">
+        Google Workspace requires hosts to admit external callers. This lightweight extension silently clicks <strong>"Admit"</strong> for you in milliseconds, so your bot enters immediately.
+      </p>
+
+      <div style="background:#f8fafc;border:1px solid var(--border-subtle);border-radius:var(--radius-xs);padding:12px;margin:12px 0">
+        <strong style="color:var(--text-primary);display:block;margin-bottom:6px">How to enable in 2 clicks:</strong>
+        <ol style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px">
+          <li>Open your Chrome or Edge browser and navigate to: <br><code style="background:#e2e8f0;padding:2px 6px;border-radius:3px;font-size:0.75rem">chrome://extensions</code></li>
+          <li>Turn ON <strong>Developer mode</strong> (toggle switch at top right).</li>
+          <li>Click <strong>Load unpacked</strong> and select the directory: <br><code id="ext-path-text" style="background:#e2e8f0;padding:2px 6px;border-radius:3px;font-size:0.75rem;word-break:break-all">fireflies-notetaker/extensions/auto_admit</code></li>
+        </ol>
+      </div>
+
+      <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:var(--radius-xs);padding:10px;color:#166534;font-size:0.775rem">
+        <strong>Automatic 1-Click Launch:</strong> Click the button below to launch Google Chrome with the Auto-Admit extension preloaded automatically into background!
+      </div>
+    </div>
+    <div class="modal-footer" style="gap:8px">
+      <button type="button" class="btn btn-ghost" id="modal-ext-cancel">Close</button>
+      <button type="button" class="btn btn-outline-orange" id="btn-copy-ext-path">Copy Path</button>
+      <button type="button" class="btn btn-primary" id="btn-launch-chrome-autoadmit">🚀 Launch Chrome (Auto-Admit Active)</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Toast container ────────────────────────────────────────────────── -->
+<div id="toast-container" class="toast-container"></div>
+
+<script type="module" src="/js/meetings.js"></script>
+<script>
+  // Extra button wiring for empty state buttons (same handlers as header)
+  document.getElementById('btn-new-meeting-empty')?.addEventListener('click', () =>
+    document.getElementById('btn-new-meeting').click());
+  document.getElementById('btn-mock-empty')?.addEventListener('click', () =>
+    document.getElementById('btn-mock-meeting').click());
+  document.getElementById('modal-cancel')?.addEventListener('click', () =>
+    document.getElementById('modal-close').click());
+</script>
+</body>
+</html>

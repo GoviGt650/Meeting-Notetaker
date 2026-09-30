@@ -1,0 +1,140 @@
+# ==============================================================================
+# Environment & Secrets (Never commit credentials or tokens)
+# ==============================================================================
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+client_secret*.json
+credentials*.json
+token*.json
+
+# ==============================================================================
+# Bot Data & Chrome Profiles
+# ==============================================================================
+# Isolated Chrome profiles created during automated bot sessions
+data/bot_chrome_profile/
+**/bot_chrome_profile/
+
+# Meeting audio/video recordings and media assets
+data/recordings/*
+!data/recordings/.gitkeep
+*.webm
+*.wav
+*.mp3
+*.m4a
+*.mp4
+
+# Generated PDF reports and exports
+data/exports/*
+!data/exports/.gitkeep
+*.pdf
+
+# Databases & local persistent storage
+*.db
+*.db-shm
+*.db-wal
+*.db-journal
+*.sqlite
+*.sqlite3
+data/*.db
+backend/data/*.db
+
+# Logs & bot process outputs
+*.log
+logs/
+data/*.log
+
+# Runtime & test screenshots (generated at root during execution)
+ui_screenshot_*.png
+admitted_screen.png
+bot_screen.png
+pdf_page1_preview.png
+
+# Keep UI templates required by the bot
+!data/templates/
+!data/templates/*.png
+
+# ==============================================================================
+# Python
+# ==============================================================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environments
+.venv/
+venv/
+ENV/
+env/
+env.bak/
+venv.bak/
+
+# Testing & Coverage
+.pytest_cache/
+.coverage
+.coverage.*
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+htmlcov/
+.tox/
+.nox/
+
+# ==============================================================================
+# Node & Frontend Dependencies (if added)
+# ==============================================================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# ==============================================================================
+# IDEs & Editors
+# ==============================================================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+
+# ==============================================================================
+# Operating System & Temporary Files
+# ==============================================================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+tmp/
+temp/

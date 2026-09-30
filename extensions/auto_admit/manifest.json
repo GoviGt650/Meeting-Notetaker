@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "Fireflies Notetaker - Silent Auto-Admit",
+  "version": "1.0.0",
+  "description": "Automatically admits the Fireflies Notetaker bot into Google Meet calls without host intervention.",
+  "permissions": ["activeTab"],
+  "host_permissions": [
+    "https://meet.google.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://meet.google.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Fireflies Auto-Admit"
+  }
+}
